@@ -1,4 +1,4 @@
-use crate::components::RigidBodyComponent;
+use crate::components::Physics;
 use amethyst::{
     core::Transform,
     ecs::{Join, ReadStorage, WriteStorage},
@@ -10,14 +10,14 @@ pub struct TransformationSystem;
 
 impl<'a> System<'a> for TransformationSystem {
     type SystemData = (
-        ReadStorage<'a, RigidBodyComponent>,
+        ReadStorage<'a, Physics>,
         WriteStorage<'a, Transform>,
         ReadExpect<'a, RigidBodySet>,
         ReadExpect<'a, ColliderSet>,
     );
 
     fn run(&mut self, data: Self::SystemData) {
-        let (bodies, mut transforms, bodies_set, colliders_set) = data;
+        let (bodies, mut transforms, bodies_set, _colliders_set) = data;
 
         for (body_handle, transform) in (&bodies, &mut transforms).join() {
             let body = bodies_set.get(body_handle.body_handle).expect("could not find a body in set for entity");

@@ -3,10 +3,9 @@ use amethyst::prelude::*;
 use crate::entities::add_ball;
 use crate::resources::SpriteSheetHandle;
 use crate::{
-    components::{RigidBodyComponent, Ball},
-    resources::{MAP_HEIGHT, MAP_WIDTH},
+    components::{Physics, Ball},
+    resources::Context,
 };
-use rapier2d::{geometry::ColliderSet, dynamics::RigidBodySet};
 pub struct GameState;
 
 impl SimpleState for GameState {
@@ -17,11 +16,13 @@ impl SimpleState for GameState {
         };
 
         data.world.register::<Ball>();
-        data.world.register::<RigidBodyComponent>();
+        data.world.register::<Physics>();
+
+        let ctx = *data.world.read_resource::<Context>();
 
         add_ball(
             data.world,
-            (MAP_WIDTH / 2., MAP_HEIGHT / 2.),
+            (ctx.map_width / 2., ctx.map_height / 2.),
             sprite_sheet_handle,
         );
     }

@@ -5,7 +5,7 @@ use amethyst::{
 };
 
 use super::GameState;
-use crate::{entities::load_camera, resources::load_sprite_sheet};
+use crate::{entities::load_camera, resources::{Context, load_sprite_sheet}};
 
 #[derive(Default)]
 pub struct LoadingState {
@@ -15,6 +15,11 @@ pub struct LoadingState {
 impl SimpleState for LoadingState {
     fn on_start(&mut self, data: StateData<'_, GameData<'_, '_>>) {
         let world = data.world;
+        // context is a resources that general data that everyone might want to know about quickly
+        let context = Context::from_config_file("config/context.ron")
+            .expect("could not load context from config file.");
+
+        world.insert(context);
 
         self.progress_counter = Some(load_sprite_sheet(world));
         let mut progress = ProgressCounter::default();

@@ -10,7 +10,6 @@ use amethyst::{
     ui::{RenderUi, UiBundle},
     utils::{application_root_dir, fps_counter::FpsCounterBundle},
 };
-use std::time::Duration;
 
 mod components;
 mod entities;
@@ -44,7 +43,7 @@ fn main() -> amethyst::Result<()> {
                 .with_plugin(RenderFlat2D::default()),
         )?
         .with_system_desc(
-            systems::RigidBodySystemDesc::default(),
+            systems::PhysicsSystemDesc::default(),
             "physics_system",
             &[],
         )

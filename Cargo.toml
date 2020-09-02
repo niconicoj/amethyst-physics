@@ -9,6 +9,7 @@ amethyst = {version = "0.15.2", features = ["no-slow-safety-checks"]}
 log = { version = "0.4.8", features = ["serde"] }
 serde = "1.0.115"
 rapier2d = { version = "0.1.4", features = [ "simd-nightly", "parallel" ] }
+ron = "0.6.1"
 
 [features]
 default = ["vulkan"]

@@ -1,5 +1,5 @@
-mod map_config;
 mod spritesheet;
+mod context;
 
-pub use self::map_config::{MAP_HEIGHT, MAP_WIDTH};
 pub use self::spritesheet::{load_sprite_sheet, SpriteSheetHandle};
+pub use self::context::Context;

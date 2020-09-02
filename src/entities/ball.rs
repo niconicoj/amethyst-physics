@@ -1,12 +1,12 @@
 use amethyst::{
     assets::Handle,
-    core::Transform,
+    core::{math::Vector3, Transform},
     prelude::{Builder, WorldExt},
     renderer::{SpriteRender, SpriteSheet},
     shred::World,
 };
 
-use crate::components::{RigidBodyComponent, Ball};
+use crate::{resources::Context, components::{Physics, Ball}};
 use rapier2d::{geometry::{ColliderBuilder, ColliderSet}, dynamics::{RigidBodySet, RigidBodyBuilder, BodyStatus}};
 
 pub fn add_ball(
@@ -29,9 +29,9 @@ pub fn add_ball(
         let mut collider_set = world.write_resource::<ColliderSet>();
         collider_set.insert(collider, body_handle, &mut body_set)
     };
-
+    let ctx = *world.read_resource::<Context>();
     let mut transform = Transform::default();
-
+    transform.set_scale(Vector3::new(ctx.scale, ctx.scale, ctx.scale));
     transform.set_translation_xyz(position.0, position.1, 0.0);
 
     let sprite_render = SpriteRender {
@@ -41,7 +41,7 @@ pub fn add_ball(
 
     world
         .create_entity()
-        .with(RigidBodyComponent::new(body_handle, collider_handle))
+        .with(Physics::new(body_handle, collider_handle))
         .with(transform)
         .with(Ball)
         .with(sprite_render.clone())

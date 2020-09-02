@@ -7,34 +7,34 @@ use rapier2d::geometry::{BroadPhase, ColliderSet, NarrowPhase};
 use rapier2d::na::Vector2;
 use rapier2d::pipeline::PhysicsPipeline;
 
-pub struct RigidBodySystemDesc {
+pub struct PhysicsSystemDesc {
     pub gravity: Vector2<f32>,
     pub integration_parameters: IntegrationParameters,
 }
 
-impl Default for RigidBodySystemDesc {
+impl Default for PhysicsSystemDesc {
     fn default() -> Self {
-        RigidBodySystemDesc {
+        PhysicsSystemDesc {
             gravity: Vector2::new(0.0, -9.81),
             integration_parameters: IntegrationParameters::default(),
         }
     }
 }
 
-impl<'a, 'b> SystemDesc<'a, 'b, RigidBodySystem> for RigidBodySystemDesc {
-    fn build(self, world: &mut World) -> RigidBodySystem {
-        <RigidBodySystem as System<'_>>::SystemData::setup(world);
+impl<'a, 'b> SystemDesc<'a, 'b, PhysicsSystem> for PhysicsSystemDesc {
+    fn build(self, world: &mut World) -> PhysicsSystem {
+        <PhysicsSystem as System<'_>>::SystemData::setup(world);
 
         // insert the rigidbodyset and colliderset in the world, init the system with it's required params
         world.insert(RigidBodySet::new());
         world.insert(ColliderSet::new());
         world.insert(JointSet::new());
 
-        RigidBodySystem::new(self.integration_parameters, self.gravity)
+        PhysicsSystem::new(self.integration_parameters, self.gravity)
     }
 }
 
-pub struct RigidBodySystem {
+pub struct PhysicsSystem {
     pipeline: PhysicsPipeline,
     gravity: Vector2<f32>,
     integration_parameters: IntegrationParameters,
@@ -42,9 +42,9 @@ pub struct RigidBodySystem {
     narrow_phase: NarrowPhase,
 }
 
-impl RigidBodySystem {
+impl PhysicsSystem {
     pub fn new(integration_parameters: IntegrationParameters, gravity: Vector2<f32>) -> Self {
-        RigidBodySystem {
+        PhysicsSystem {
             pipeline: PhysicsPipeline::new(),
             gravity,
             integration_parameters,
@@ -54,7 +54,7 @@ impl RigidBodySystem {
     }
 }
 
-impl<'a> System<'a> for RigidBodySystem {
+impl<'a> System<'a> for PhysicsSystem {
     type SystemData = (
         WriteExpect<'a, RigidBodySet>,
         WriteExpect<'a, ColliderSet>,
