@@ -10,6 +10,7 @@ use amethyst::{
     ui::{RenderUi, UiBundle},
     utils::{application_root_dir, fps_counter::FpsCounterBundle},
 };
+use std::time::Duration;
 
 mod components;
 mod entities;
@@ -42,10 +43,16 @@ fn main() -> amethyst::Result<()> {
                 .with_plugin(RenderUi::default())
                 .with_plugin(RenderFlat2D::default()),
         )?
+        .with_system_desc(
+            systems::RigidBodySystemDesc::default(),
+            "physics_system",
+            &[],
+        )
+        .with(systems::TransformationSystem, "transformation_system", &["physics_system"])
         .with(systems::UiFpsSystem::default(), "ui_fps_system", &[]);
 
     let mut game = Application::build(resources, states::LoadingState::default())?
-        .with_frame_limit(FrameRateLimitStrategy::Unlimited, 144)
+        .with_frame_limit(FrameRateLimitStrategy::Yield, 60)
         .build(game_data)?;
     game.run();
 
