@@ -23,14 +23,6 @@ impl Default for Context {
 }
 
 impl Context {
-    pub fn new(map_width: f32, map_height: f32, scale: f32) -> Self {
-        Context {
-            map_width: map_width,
-            map_height: map_height,
-            scale: scale,
-        }
-    }
-
     pub fn from_config_file<P: AsRef<Path>>(path: P) -> Result<Context, Box<dyn Error>> {
         let file = File::open(path)?;
         let reader = BufReader::new(file);

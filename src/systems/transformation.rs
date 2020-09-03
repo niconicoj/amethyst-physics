@@ -20,9 +20,11 @@ impl<'a> System<'a> for TransformationSystem {
         let (bodies, mut transforms, bodies_set, _colliders_set) = data;
 
         for (body_handle, transform) in (&bodies, &mut transforms).join() {
+            // maybe we should not panic here ?
             let body = bodies_set.get(body_handle.body_handle).expect("could not find a body in set for entity");
             transform.set_translation_x(body.position.translation.vector.x);
             transform.set_translation_y(body.position.translation.vector.y);
+            transform.set_rotation_2d(body.position.rotation.angle());
         }
     }
 }
