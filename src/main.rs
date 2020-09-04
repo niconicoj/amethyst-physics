@@ -47,6 +47,7 @@ fn main() -> amethyst::Result<()> {
             "physics_system",
             &[],
         )
+        .with(systems::PlayerInputSystem, "player_input_system", &["physics_system"])
         .with(systems::TransformationSystem, "transformation_system", &["physics_system"])
         .with(systems::UiFpsSystem::default(), "ui_fps_system", &[]);
 

@@ -15,6 +15,7 @@ pub fn add_ground(
     width: f32,
     sprite_sheet_handle: Handle<SpriteSheet>,
 ) {
+    // this is messy af. nedd to think of a better way to handle all of this
     let ctx = *world.read_resource::<Context>();
 
     let body = RigidBodyBuilder::new(BodyStatus::Static)

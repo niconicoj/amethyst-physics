@@ -1,9 +1,9 @@
 use amethyst::prelude::*;
 
-use crate::entities::{add_ball, add_ground};
+use crate::entities::{add_ball, add_ground, add_player};
 use crate::resources::SpriteSheetHandle;
 use crate::{
-    components::{Physics, Ball, Ground},
+    components::{Physics, Ball, Player, Ground},
     resources::Context,
 };
 pub struct GameState;
@@ -16,6 +16,7 @@ impl SimpleState for GameState {
         };
 
         data.world.register::<Ball>();
+        data.world.register::<Player>();
         data.world.register::<Ground>();
         data.world.register::<Physics>();
 
@@ -26,9 +27,9 @@ impl SimpleState for GameState {
             (ctx.map_width * 0.5, ctx.map_height * 0.8),
             sprite_sheet_handle.clone(),
         );
-        add_ball(
+        add_player(
             data.world,
-            (ctx.map_width * 0.51, ctx.map_height * 0.9),
+            (ctx.map_width * 0.51, ctx.map_height * 0.5),
             sprite_sheet_handle.clone(),
         );
         add_ground(data.world, 
