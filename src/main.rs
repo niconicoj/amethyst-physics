@@ -1,5 +1,5 @@
 use amethyst::{
-    core::{frame_limiter::FrameRateLimitStrategy, transform::TransformBundle},
+    core::{transform::TransformBundle, Transform},
     input::{InputBundle, StringBindings},
     prelude::*,
     renderer::{
@@ -9,6 +9,17 @@ use amethyst::{
     },
     ui::{RenderUi, UiBundle},
     utils::{application_root_dir, fps_counter::FpsCounterBundle},
+    
+};
+use specs_physics::{
+    systems::{
+        PhysicsStepperSystem,
+        SyncBodiesFromPhysicsSystem,
+        SyncBodiesToPhysicsSystem,
+        SyncCollidersToPhysicsSystem,
+        SyncParametersToPhysicsSystem,
+    },
+    SimplePosition,
 };
 
 mod components;
@@ -42,17 +53,44 @@ fn main() -> amethyst::Result<()> {
                 .with_plugin(RenderUi::default())
                 .with_plugin(RenderFlat2D::default()),
         )?
-        .with_system_desc(
-            systems::PhysicsSystemDesc::default(),
-            "physics_system",
+        .with(
+            SyncBodiesToPhysicsSystem::<f32, SimplePosition<f32>>::default(),
+            "sync_bodies_to_physics_system",
             &[],
         )
-        .with(systems::PlayerInputSystem, "player_input_system", &["physics_system"])
-        .with(systems::TransformationSystem, "transformation_system", &["physics_system"])
-        .with(systems::UiFpsSystem::default(), "ui_fps_system", &[]);
+        .with(
+            SyncCollidersToPhysicsSystem::<f32, SimplePosition<f32>>::default(),
+            "sync_colliders_to_physics_system",
+            &["sync_bodies_to_physics_system"],
+        )
+        .with(
+            SyncParametersToPhysicsSystem::<f32>::default(),
+            "sync_gravity_to_physics_system",
+            &[],
+        )
+        .with(
+            PhysicsStepperSystem::<f32>::default(),
+            "physics_stepper_system",
+            &[
+                "sync_bodies_to_physics_system",
+                "sync_colliders_to_physics_system",
+                "sync_gravity_to_physics_system",
+            ],
+        )
+        .with(
+            SyncBodiesFromPhysicsSystem::<f32, SimplePosition<f32>>::default(),
+            "sync_bodies_from_physics_system",
+            &["physics_stepper_system"],
+        )
+        .with(
+            systems::TransformSystem,
+            "transformation_system",
+            &["sync_bodies_from_physics_system"]
+        )
+        .with(systems::UiFpsSystem::default(), "ui_fps_system", &[])
+        .with(systems::PlayerInputsystem, "player_input_system", &["sync_bodies_from_physics_system"]);
 
     let mut game = Application::build(resources, states::LoadingState::default())?
-        .with_frame_limit(FrameRateLimitStrategy::Yield, 60)
         .build(game_data)?;
     game.run();
 

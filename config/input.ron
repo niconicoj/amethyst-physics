@@ -1,11 +1,11 @@
 (
     axes: {
-        "move_x": Emulated(
+        "run": Emulated(
             pos: Key(Right),
             neg: Key(Left),
         ),
-        "move_y": Emulated(
-            pos: Key(E),
+        "jump": Emulated(
+            pos: Key(Up),
             neg: Key(Q),
         ),
         "move_z": Emulated(

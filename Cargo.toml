@@ -5,11 +5,16 @@ authors = ["Hilmar Wiegand <me@hwgnd.de>", "Amethyst Foundation <contact@amethys
 edition = "2018"
 
 [dependencies]
-amethyst = {version = "0.15.2", features = ["no-slow-safety-checks"]}
 log = { version = "0.4.8", features = ["serde"] }
 serde = "1.0.115"
-rapier2d = { version = "0.1.4", features = [ "simd-nightly", "parallel" ] }
 ron = "0.6.1"
+nalgebra = "0.22.0"
+specs-physics = { git = "https://github.com/niconicoj/specs-physics"}
+
+[dependencies.amethyst]
+git = "https://github.com/niconicoj/amethyst"
+default-features = false
+features = ["no-slow-safety-checks", "json", "animation", "gilrs_controller"]
 
 [features]
 default = ["vulkan"]

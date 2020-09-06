@@ -5,9 +5,12 @@ use amethyst::{
     renderer::{SpriteRender, SpriteSheet},
     shred::World,
 };
+use specs_physics::{
+    colliders::Shape, nalgebra::Isometry2, nphysics::object::BodyStatus, PhysicsBodyBuilder,
+    PhysicsColliderBuilder, SimplePosition,
+};
 
-use crate::{resources::Context, components::{Physics, Player}};
-use rapier2d::{geometry::{ColliderBuilder, ColliderSet}, dynamics::{RigidBodySet, RigidBodyBuilder, BodyStatus}};
+use crate::{components::Player, resources::Context};
 
 pub fn add_player(
     world: &mut World,
@@ -15,21 +18,22 @@ pub fn add_player(
     sprite_sheet_handle: Handle<SpriteSheet>,
 ) {
     let ctx = *world.read_resource::<Context>();
-    let body = RigidBodyBuilder::new(BodyStatus::Dynamic)
-        .translation(position.0, position.1)
+
+    let simple_pos = SimplePosition::<f32>(Isometry2::<f32>::translation(position.0, position.1));
+
+    let body = PhysicsBodyBuilder::<f32>::from(BodyStatus::Dynamic)
+        .gravity_enabled(true)
         .build();
-    let body_handle = {
-        let mut body_set = world.write_resource::<RigidBodySet>();
-        body_set.insert(body)
-    };
+    let collider = PhysicsColliderBuilder::<f32>::from(Shape::Ball {
+        radius: 32.0 * ctx.scale,
+    })
+    .margin(0.2 * ctx.scale)
+    .build();
 
-    let collider = ColliderBuilder::cuboid(43.*ctx.scale / 2., 64.*ctx.scale / 2.).build();
-
-    let collider_handle = {
-        let mut body_set = world.write_resource::<RigidBodySet>();
-        let mut collider_set = world.write_resource::<ColliderSet>();
-        collider_set.insert(collider, body_handle, &mut body_set)
-    };
+    let mut transform = Transform::default();
+    transform.set_scale(Vector3::new(ctx.scale, ctx.scale, ctx.scale));
+    transform.set_translation_x(position.0);
+    transform.set_translation_y(position.1);
     let mut transform = Transform::default();
     transform.set_scale(Vector3::new(ctx.scale, ctx.scale, ctx.scale));
     transform.set_translation_xyz(position.0, position.1, 0.0);
@@ -41,9 +45,11 @@ pub fn add_player(
 
     world
         .create_entity()
-        .with(Physics::new(body_handle, collider_handle))
+        .with(simple_pos)
         .with(transform)
-        .with(Player)
+        .with(body)
+        .with(collider)
+        .with(Player::default())
         .with(sprite_render.clone())
         .build();
 }

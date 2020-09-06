@@ -6,6 +6,7 @@ use amethyst::{
 
 use super::GameState;
 use crate::{entities::load_camera, resources::{Context, load_sprite_sheet}};
+use specs_physics::{nalgebra::Vector2, parameters::Gravity};
 
 #[derive(Default)]
 pub struct LoadingState {
@@ -24,6 +25,8 @@ impl SimpleState for LoadingState {
         self.progress_counter = Some(load_sprite_sheet(world));
         let mut progress = ProgressCounter::default();
         world.exec(|mut creator: UiCreator<'_>| creator.create("ui/fps.ron", &mut progress));
+        let gravity = Gravity(Vector2::<f32>::new(0.0, -9.81));
+        world.insert(gravity);
         load_camera(world);
     }
 

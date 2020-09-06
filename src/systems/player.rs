@@ -1,33 +1,25 @@
-use crate::components::Physics;
 use crate::components::Player;
 use amethyst::{
-    ecs::{Join, Read, ReadStorage, WriteExpect},
+    ecs::{Join, Read, ReadStorage, System, WriteStorage},
     input::{InputHandler, StringBindings},
-    shred::System,
 };
-use rapier2d::{dynamics::RigidBodySet, geometry::ColliderSet, na::Vector2};
-pub struct PlayerInputSystem;
+use specs_physics::{nalgebra::Vector2, nphysics::algebra::Force2, PhysicsBody};
 
-impl<'a> System<'a> for PlayerInputSystem {
+pub struct PlayerInputsystem;
+
+impl<'s> System<'s> for PlayerInputsystem {
     type SystemData = (
-        WriteExpect<'a, RigidBodySet>,
-        WriteExpect<'a, ColliderSet>,
-        ReadStorage<'a, Physics>,
-        ReadStorage<'a, Player>,
-        Read<'a, InputHandler<StringBindings>>,
+        WriteStorage<'s, PhysicsBody<f32>>,
+        ReadStorage<'s, Player>,
+        Read<'s, InputHandler<StringBindings>>,
     );
 
     fn run(&mut self, data: Self::SystemData) {
-        let (mut bodies_set, mut _colliders_set, physics_handles, player_flags, input) = data;
+        let (mut bodies, player, input) = data;
 
-        for (physics_handle, _ ) in (&physics_handles, &player_flags).join() {
-            let run_input = input.axis_value("move_x").expect("Move x action exists");
-            // maybe we should not panic here ?
-            let mut body = bodies_set
-                .get_mut(physics_handle.body_handle)
-                .expect("could not find a body in set for entity");
-
-            body.apply_force(Vector2::new(run_input * 4., 0.));
+        for (body, _) in (&mut bodies, &player).join() {
+            let run_input = input.axis_value("run").expect("run action exists");
+            body.apply_external_force(&Force2::new(Vector2::<f32>::new(run_input, 0.0), 0.0));
         }
     }
 }
