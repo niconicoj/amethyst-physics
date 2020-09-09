@@ -8,7 +8,7 @@ use amethyst::{
 use specs_physics::{
     colliders::Shape, nalgebra::Isometry2, nphysics::object::BodyStatus, PhysicsBodyBuilder,
     PhysicsColliderBuilder, SimplePosition,
-};
+nalgebra::Vector2};
 
 use crate::{components::Player, resources::Context};
 
@@ -23,9 +23,10 @@ pub fn add_player(
 
     let body = PhysicsBodyBuilder::<f32>::from(BodyStatus::Dynamic)
         .gravity_enabled(true)
+        .lock_translations(Vector2::new(true, false))
         .build();
-    let collider = PhysicsColliderBuilder::<f32>::from(Shape::Ball {
-        radius: 32.0 * ctx.scale,
+    let collider = PhysicsColliderBuilder::<f32>::from(Shape::Cuboid {
+        half_extents: Vector2::<f32>::new(21.5*ctx.scale, 32.0*ctx.scale),
     })
     .margin(0.2 * ctx.scale)
     .build();

@@ -19,7 +19,7 @@ impl<'s> System<'s> for PlayerInputsystem {
 
         for (body, _) in (&mut bodies, &player).join() {
             let run_input = input.axis_value("run").expect("run action exists");
-            body.velocity += Velocity2::<f32>::new(Vector2::<f32>::new(run_input*0.1, 0.0), 0.0);
+            body.velocity = Velocity2::<f32>::new(Vector2::<f32>::new(run_input, body.velocity.linear.y), 0.0);
         }
     }
 }
