@@ -112,7 +112,8 @@ dependencies = [
  "nalgebra 0.22.0",
  "ron 0.6.1",
  "serde",
- "specs-physics",
+ "strum",
+ "strum_macros",
 ]
 
 [[package]]
@@ -1137,12 +1138,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "fixedbitset"
-version = "0.1.9"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "86d4de0081402f5e88cdac65c8dcdcc73118c1a7a465e2a05f0da05843a8ea33"
-
-[[package]]
 name = "float-ord"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1216,15 +1211,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c31b6d751ae2c7f11320402d34e41349dd1016f8d5d45e48c4312bc8625af50c"
 dependencies = [
  "byteorder",
-]
-
-[[package]]
-name = "generational-arena"
-version = "0.2.8"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8e1d3b771574f62d0548cee0ad9057857e9fc25d7a3335f140c84f6acd0bf601"
-dependencies = [
- "cfg-if",
 ]
 
 [[package]]
@@ -1594,16 +1580,6 @@ name = "inflections"
 version = "1.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a257582fdcde896fd96463bf2d40eefea0580021c0712a0e2b028b60b47a837a"
-
-[[package]]
-name = "instant"
-version = "0.1.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5b141fdc7836c525d4d594027d318c84161ca17aaf8113ab1f81ab93ae897485"
-dependencies = [
- "stdweb 0.4.20",
- "time",
-]
 
 [[package]]
 name = "inventory"
@@ -2002,25 +1978,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "ncollide2d"
-version = "0.21.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f6203ff8e12ecc193b016ff899f75268ef9afe12ad050255e65fc829ffec767d"
-dependencies = [
- "alga",
- "approx 0.3.2",
- "bitflags",
- "downcast-rs",
- "either",
- "nalgebra 0.19.0",
- "num-traits 0.2.12",
- "petgraph",
- "slab",
- "slotmap",
- "smallvec 0.6.13",
-]
-
-[[package]]
 name = "nix"
 version = "0.14.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2060,28 +2017,6 @@ checksum = "ffb4262d26ed83a1c0a33a38fe2bb15797329c85770da05e6b828ddb782627af"
 dependencies = [
  "memchr",
  "version_check",
-]
-
-[[package]]
-name = "nphysics2d"
-version = "0.13.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ce8e804fd35336fa904dbede189c582b9923a285ac561eb7045166c62dea65f9"
-dependencies = [
- "alga",
- "approx 0.3.2",
- "bitflags",
- "downcast-rs",
- "either",
- "generational-arena",
- "instant",
- "lazy_static",
- "nalgebra 0.19.0",
- "ncollide2d",
- "num-traits 0.2.12",
- "slotmap",
- "smallvec 0.6.13",
- "stdweb 0.4.20",
 ]
 
 [[package]]
@@ -2283,12 +2218,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "ordermap"
-version = "0.3.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a86ed3f5f244b372d6b1a00b72ef7f8876d0bc6a78a4c9985c53614041512063"
-
-[[package]]
 name = "palette"
 version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2393,16 +2322,6 @@ name = "percent-encoding"
 version = "2.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d4fd5641d01c8f18a23da7b6fe29298ff4b55afcccdf78973b24cf3175fee32e"
-
-[[package]]
-name = "petgraph"
-version = "0.4.13"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9c3659d1ee90221741f65dd128d9998311b0e40c5d3c23a62445938214abce4f"
-dependencies = [
- "fixedbitset",
- "ordermap",
-]
 
 [[package]]
 name = "phf"
@@ -3459,12 +3378,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "slotmap"
-version = "0.4.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c46a3482db8f247956e464d783693ece164ca056e6e67563ee5505bdb86452cd"
-
-[[package]]
 name = "smallvec"
 version = "0.6.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3537,20 +3450,6 @@ dependencies = [
  "hibitset",
  "shrev",
  "specs",
-]
-
-[[package]]
-name = "specs-physics"
-version = "0.3.0"
-dependencies = [
- "log",
- "nalgebra 0.19.0",
- "ncollide2d",
- "nphysics2d",
- "objekt",
- "shrev",
- "specs",
- "specs-hierarchy",
 ]
 
 [[package]]
@@ -3649,6 +3548,24 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fd0a4829a5c591dc24a944a736d6b1e4053e51339a79fd5d4702c4c999a9c45e"
 dependencies = [
  "lock_api",
+]
+
+[[package]]
+name = "strum"
+version = "0.19.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3924a58d165da3b7b2922c667ab0673c7b5fd52b5c19ea3442747bcb3cd15abe"
+
+[[package]]
+name = "strum_macros"
+version = "0.19.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2d2ab682ecdcae7f5f45ae85cd7c1e6c8e68ea42c8a612d47fedf831c037146a"
+dependencies = [
+ "heck",
+ "proc-macro2 1.0.20",
+ "quote 1.0.7",
+ "syn 1.0.40",
 ]
 
 [[package]]

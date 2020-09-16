@@ -1,5 +1,5 @@
 (
-    map_width: 8.0,
-    map_height: 6.0,
-    scale: 0.01,
+    map_width: 800.0,
+    map_height: 600.0,
+    scale: 1.0,
 )
