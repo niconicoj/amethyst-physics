@@ -42,9 +42,10 @@ impl<'s> System<'s> for GravitySystem {
                 bounding_box.accelerate(self.gravity*time.delta_seconds());
                 bounding_box.position.y = (bounding_box.position.y as f32).max(50.0);
                 if bounding_box.position.y == 50.0 {
-                    bounding_box.velocity.y = 0.0;
                     bounding_box.on_ground = true;
                 }  
+            } else {
+                bounding_box.velocity.y = 0.0;
             }
             
         }

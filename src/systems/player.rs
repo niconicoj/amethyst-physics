@@ -42,7 +42,7 @@ impl<'s> System<'s> for PlayerInputsystem {
                 }
             } else {
                 if run_input != 0.0 {
-                    bounding_box.accelerate(Vector2::new(run_input*10.0, 0.0));
+                    bounding_box.accelerate(Vector2::new(run_input*2.0, 0.0));
                     if run_input > 0.0 {
                         orientation.value = OrientationType::Right;
                     } else {
