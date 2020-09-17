@@ -4,7 +4,6 @@ use amethyst::{
     core::math::Vector2,
     core::{math::Vector3, Transform},
     prelude::{Builder, WorldExt},
-    renderer::{SpriteRender, SpriteSheet},
     shred::World,
 };
 
@@ -32,6 +31,7 @@ pub fn add_player(
     let bounding_box = BoundingBox::new(
         Vector2::new(position.0, position.1),
         Vector2::new(21.5 * ctx.scale, 32.0 * ctx.scale),
+        Vector2::new(100.0, 200.0),
     );
 
     world
@@ -40,6 +40,6 @@ pub fn add_player(
         .with(bounding_box)
         .with(Player::default())
         .with(prefab)
-        .with(Animation::new(AnimationId::Idle, vec![AnimationId::Idle]))
+        .with(Animation::new(AnimationId::Idle, vec![AnimationId::Idle, AnimationId::Running]))
         .build();
 }

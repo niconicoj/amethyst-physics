@@ -1,14 +1,8 @@
 use amethyst::{
-    assets::{AssetStorage, Loader, ProgressCounter, Handle, Prefab, PrefabLoader, RonFormat},
+    assets::{ProgressCounter, Handle, Prefab, PrefabLoader, RonFormat},
     ecs::prelude::World,
-    prelude::WorldExt,
-    renderer::{
-        formats::texture::ImageFormat,
-        sprite::{SpriteSheetFormat, SpriteSheet},
-        Texture
-    },
 };
-use strum_macros::{EnumString};
+use strum_macros::EnumString;
 use std::slice::Iter;
 use std::collections::HashMap;
 

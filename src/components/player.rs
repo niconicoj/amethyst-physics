@@ -1,20 +1,23 @@
 use amethyst::ecs::{Component, HashMapStorage};
 
-pub enum PlayerStatus {
+pub enum PlayerState {
     Idle,
-    Falling,
+    Jumping,
+    Running,
 }
 
 #[derive(Component)]
 #[storage(HashMapStorage)]
 pub struct Player {
-    status: PlayerStatus
+    pub state: PlayerState,
+    on_ground: bool,
 }
 
 impl Default for Player {
     fn default() -> Self {
         Player {
-            status: PlayerStatus::Idle,
+            state: PlayerState::Idle,
+            on_ground: true,
         }
     }
 }

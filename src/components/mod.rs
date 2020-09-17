@@ -5,6 +5,7 @@ mod collision;
 mod animation;
 
 pub use self::player::Player;
+pub use self::player::PlayerState;
 pub use self::ball::Ball;
 pub use self::ground::Ground;
 pub use self::collision::*;

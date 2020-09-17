@@ -58,6 +58,22 @@ Prefab(
                                 ],
                             ),
                         ),
+                        (
+                            Running,
+                            (
+                                samplers: [
+                                    (
+                                        0,
+                                        SpriteIndex,
+                                        (
+                                            input:  [0.0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2],
+                                            output: [8, 9, 10, 11, 12, 13, 8],
+                                            function: Step,
+                                        ),
+                                    ),
+                                ],
+                            ),
+                        ),
                     ],
                 ),
             ),
