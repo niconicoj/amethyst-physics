@@ -36,6 +36,7 @@ impl<'s> System<'s> for AnimationControlSystem {
                 animation.types.iter().for_each(|&animation_id| {
                     if !animation_control_set.has_animation(animation_id) {
                         let end = match animation_id {
+                            AnimationId::Jumping => EndControl::Stay,
                             _ => EndControl::Loop(None),
                         };
 
@@ -67,7 +68,7 @@ impl<'s> System<'s> for PlayerAnimationSystem {
     fn run(&mut self, data: Self::SystemData) {
         let (entities, players, mut animations, mut animation_control_sets) = data;
 
-        for (entity, player, mut animation, animation_control_set) in (
+        for (_entity, player, mut animation, animation_control_set) in (
             &entities,
             &players,
             &mut animations,
@@ -78,6 +79,8 @@ impl<'s> System<'s> for PlayerAnimationSystem {
             let new_animation_id = match player.state {
                 PlayerState::Idle => AnimationId::Idle,
                 PlayerState::Running => AnimationId::Running,
+                PlayerState::Jumping => AnimationId::Jumping,
+                PlayerState::Falling => AnimationId::Falling,
                 _ => AnimationId::Idle,
             };
 

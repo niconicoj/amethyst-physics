@@ -14,6 +14,8 @@ use serde::{Deserialize, Serialize};
 pub enum AnimationId {
     Idle,
     Running,
+    Jumping,
+    Falling,
 }
 
 #[derive(Clone, Debug, Deserialize, PrefabData)]

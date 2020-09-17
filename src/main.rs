@@ -54,6 +54,7 @@ fn main() -> amethyst::Result<()> {
         .with_bundle(UiBundle::<StringBindings>::new())?
         .with_bundle(rendering_bundle)?
         .with(systems::PlayerInputsystem, "player_input_system", &[])
+        .with(systems::GravitySystem::default(), "gravity_system", &[])
         .with(systems::TransformSystem, "transformation_system", &[])
         .with(
             systems::AnimationControlSystem,
@@ -61,6 +62,7 @@ fn main() -> amethyst::Result<()> {
             &[],
         )
         .with(systems::UiFpsSystem::default(), "ui_fps_system", &[])
+        .with(systems::OrientationSystem, "orientation_system", &[])
         .with(systems::PlayerAnimationSystem, "player_animation_system", &["animation_control_system"]);
 
     let mut game =

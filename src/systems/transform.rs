@@ -20,7 +20,7 @@ impl<'s> System<'s> for TransformSystem {
             bounding_box.position = bounding_box.position + bounding_box.velocity.scale(time.delta_seconds());
 
             transform.set_translation_x(bounding_box.position.x);
-            transform.set_translation_y((bounding_box.position.y as f32).max(0.0));
+            transform.set_translation_y(bounding_box.position.y);
         }
     }
 }
