@@ -1,6 +1,11 @@
 use amethyst::core::math::Vector2;
 use amethyst::ecs::{Component, DenseVecStorage};
 
+pub enum BoundingBoxState {
+    OnGround,
+    Flying,
+}
+
 #[derive(Component)]
 #[storage(DenseVecStorage)]
 pub struct BoundingBox {
@@ -9,7 +14,7 @@ pub struct BoundingBox {
     pub velocity: Vector2<f32>,
     pub half_size: Vector2<f32>,
     pub max_velocity: Vector2<f32>,
-    pub on_ground: bool,
+    pub state: BoundingBoxState,
 }
 
 impl Default for BoundingBox {
@@ -20,7 +25,7 @@ impl Default for BoundingBox {
             velocity: Vector2::new(0.0, 0.0),
             half_size: Vector2::new(0.0, 0.0),
             max_velocity: Vector2::new(0.0, 0.0),
-            on_ground: false,
+            state: BoundingBoxState::Flying,
         }
     }
 }
@@ -37,7 +42,7 @@ impl BoundingBox {
             velocity: Vector2::new(0.0, 0.0),
             half_size,
             max_velocity,
-            on_ground: false,
+            state: BoundingBoxState::Flying,
         }
     }
 

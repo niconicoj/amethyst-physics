@@ -1,10 +1,10 @@
-use amethyst::{core::math::Vector2, ecs::WriteStorage, ecs::Entities, ecs::Read, core::Time};
+use amethyst::{core::math::Vector2, core::Time, ecs::Entities, ecs::Read, ecs::WriteStorage};
 use amethyst::{
     derive::SystemDesc,
-    ecs::{System, SystemData, Join},
+    ecs::{Join, System, SystemData},
 };
 
-use crate::components::BoundingBox;
+use crate::components::{BoundingBox, BoundingBoxState};
 #[derive(SystemDesc)]
 #[system_desc(name(GravitySystemDesc))]
 pub struct GravitySystem {
@@ -13,9 +13,7 @@ pub struct GravitySystem {
 
 impl GravitySystem {
     fn new(gravity: Vector2<f32>) -> Self {
-        Self {
-            gravity,
-        }
+        Self { gravity }
     }
 }
 
@@ -28,26 +26,24 @@ impl Default for GravitySystem {
 }
 
 impl<'s> System<'s> for GravitySystem {
-    type SystemData = (
-        Entities<'s>,
-        WriteStorage<'s, BoundingBox>,
-        Read<'s, Time>,
-    );
+    type SystemData = (Entities<'s>, WriteStorage<'s, BoundingBox>, Read<'s, Time>);
 
     fn run(&mut self, data: Self::SystemData) {
         let (entities, mut bounding_boxes, time) = data;
 
         for (_, bounding_box) in (&entities, &mut bounding_boxes).join() {
-            if !bounding_box.on_ground {
-                bounding_box.accelerate(self.gravity*time.delta_seconds());
-                bounding_box.position.y = (bounding_box.position.y as f32).max(50.0);
-                if bounding_box.position.y == 50.0 {
-                    bounding_box.on_ground = true;
-                }  
-            } else {
-                bounding_box.velocity.y = 0.0;
-            }
-            
+            match bounding_box.state {
+                BoundingBoxState::Flying => {
+                    bounding_box.accelerate(self.gravity * time.delta_seconds());
+                    bounding_box.position.y = (bounding_box.position.y as f32).max(50.0);
+                    if bounding_box.position.y == 50.0 {
+                        bounding_box.state = BoundingBoxState::OnGround;
+                    }
+                }
+                BoundingBoxState::OnGround => {
+                    bounding_box.velocity.y = 0.0;
+                }
+            };
         }
     }
 }
