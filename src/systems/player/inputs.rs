@@ -1,12 +1,12 @@
-use crate::components::{
+use crate::{components::{
     BoundingBox, BoundingBoxState, Orientation, OrientationType, Player, PlayerState,
-};
+}, events::PlayerInputEvent};
 use amethyst::{
     core::math::Vector2,
     core::Time,
     ecs::{Join, Read, System, WriteStorage},
     input::{InputHandler, StringBindings},
-};
+ecs::Write, shrev::EventChannel};
 
 pub struct PlayerInputsystem;
 
@@ -16,51 +16,53 @@ impl<'s> System<'s> for PlayerInputsystem {
         WriteStorage<'s, BoundingBox>,
         WriteStorage<'s, Orientation>,
         Read<'s, InputHandler<StringBindings>>,
-        Read<'s, Time>,
+        Write<'s, EventChannel<PlayerInputEvent>>,
     );
 
     fn run(&mut self, data: Self::SystemData) {
-        let (mut players, mut bounding_boxes, mut orientations, input, time) = data;
+        let (
+            mut players, 
+            mut bounding_boxes, 
+            mut orientations, 
+            input, 
+            mut player_input_channel
+        ) = data;
 
         for (player, bounding_box, orientation) in
             (&mut players, &mut bounding_boxes, &mut orientations).join()
         {
-            let run_input = input.axis_value("run").expect("run action exists");
-            let jump_input = input.axis_value("jump").expect("jump action exists");
+            let run_input = input.axis_value("run").expect("run axis exists");
+            let jump_action = input.action_is_down("jump").expect("jump action exists");
+
             match bounding_box.state {
                 BoundingBoxState::OnGround => {
                     if run_input != 0.0 {
                         player.state = PlayerState::Running;
-                        bounding_box.accelerate(Vector2::new(run_input * 10.0, 0.0));
                         if run_input > 0.0 {
                             orientation.value = OrientationType::Right;
                         } else {
                             orientation.value = OrientationType::Left;
                         }
                     } else {
-                        // we should stop in around half a sec, so decelerate at twice or velocity ?
                         player.state = PlayerState::Idle;
-                        bounding_box.velocity.x *= 0.8;
                     }
-                    if jump_input > 0.0 {
-                        bounding_box.accelerate(Vector2::new(0.0, 400.0));
+                    if jump_action {
                         player.state = PlayerState::Jumping;
                         bounding_box.state = BoundingBoxState::Flying;
+                        player_input_channel.single_write(PlayerInputEvent::Jumped);
                     }
                 }
                 BoundingBoxState::Flying => {
                     if run_input != 0.0 {
-                        bounding_box.accelerate(Vector2::new(run_input * 2.0, 0.0));
                         if run_input > 0.0 {
                             orientation.value = OrientationType::Right;
+                        player_input_channel.single_write(PlayerInputEvent::InAirRight);
                         } else {
                             orientation.value = OrientationType::Left;
+                        player_input_channel.single_write(PlayerInputEvent::InAirLeft);
                         }
                     }
-                    if jump_input <= 0.0 && bounding_box.velocity.y > 0.0 {
-                        bounding_box.accelerate(Vector2::new(0.0, -800.0 * time.delta_seconds()));
-                    }
-                    if bounding_box.velocity.y > 0. {
+                    if jump_action && bounding_box.velocity.y > 0.0 {
                         player.state = PlayerState::Jumping;
                     } else {
                         player.state = PlayerState::Falling;

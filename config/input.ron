@@ -1,19 +1,19 @@
 (
     axes: {
-        "run": Emulated(
-            pos: Key(Right),
-            neg: Key(Left),
-        ),
-        "jump": Emulated(
-            pos: Key(Up),
-            neg: Key(Q),
-        ),
-        "move_z": Emulated(
-            pos: Key(S),
-            neg: Key(W),
-        ),
+        "run": Multiple([
+            Emulated(pos: Key(Right), neg: Key(Left)),
+            Controller(
+                controller_id: 0,
+                axis: LeftX,
+                invert: false,
+                dead_zone: 0.0,
+            ),
+        ]),
     },
     actions: {
-
+        "jump": [
+            [Key(Space)],
+            [Controller(0, A)],
+        ],
     },
 )

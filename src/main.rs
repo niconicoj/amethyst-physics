@@ -19,6 +19,7 @@ mod entities;
 mod resources;
 mod states;
 mod systems;
+mod events;
 
 fn main() -> amethyst::Result<()> {
     amethyst::start_logger(Default::default());
@@ -36,6 +37,7 @@ fn main() -> amethyst::Result<()> {
 
     let prefab_loader_system_desc = PrefabLoaderSystemDesc::<AnimationPrefabData>::default();
 
+
     let rendering_bundle = RenderingBundle::<DefaultBackend>::new()
         .with_plugin(
             RenderToWindow::from_config_path(display_config)?.with_clear([0.05, 0.04, 0.06, 1.0]),
@@ -44,7 +46,6 @@ fn main() -> amethyst::Result<()> {
         .with_plugin(RenderUi::default());
 
     let game_data = GameDataBuilder::default()
-        .with_system_desc(prefab_loader_system_desc, "prefab_loader", &[])
         .with_bundle(animation_bundle)?
         .with_bundle(TransformBundle::new().with_dep(&["sprite_animation_control", "sprite_sampler_interpolation"]))?
         .with_bundle(
@@ -53,7 +54,8 @@ fn main() -> amethyst::Result<()> {
         .with_bundle(FpsCounterBundle {})?
         .with_bundle(UiBundle::<StringBindings>::new())?
         .with_bundle(rendering_bundle)?
-        .with(systems::PlayerInputsystem, "player_input_system", &[])
+        .with_bundle(systems::PlayerBundle)?
+        .with_system_desc(prefab_loader_system_desc, "prefab_loader", &[])
         .with(systems::GravitySystem::default(), "gravity_system", &[])
         .with(systems::TransformSystem, "transformation_system", &[])
         .with(

@@ -50,8 +50,8 @@ Prefab(
                                         0,
                                         SpriteIndex,
                                         (
-                                            input: [0.0, 0.3, 0.6, 0.9, 1.2],
-                                            output: [0,1,2,1,0],
+                                            input: [0.0, 0.2, 0.4, 0.6, 0.8, 1.0, 1.2],
+                                            output: [0, 1, 2, 3, 2, 1, 0],
                                             function: Step,
                                         ),
                                     ),
