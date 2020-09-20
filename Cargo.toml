@@ -1,5 +1,5 @@
 [package]
-name = "amethyst-starter-2d"
+name = "amethyst-physics"
 version = "0.2.0"
 authors = ["Hilmar Wiegand <me@hwgnd.de>", "Amethyst Foundation <contact@amethyst.rs>"]
 edition = "2018"

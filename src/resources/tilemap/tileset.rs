@@ -3,12 +3,14 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
 #[serde(tag = "type", content = "value")]
 pub enum PropType {
+    #[serde(rename = "bool")]
     Bool(bool),
 }
 
 #[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
 pub struct Property {
     pub name: String,
+    #[serde(flatten)]
     pub prop_type: PropType,
 }
 
@@ -20,11 +22,15 @@ pub struct Tile {
 
 #[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
 pub struct TileSet {
-    tiles: Vec<Tile>,
-    image: String,
-    tile_count: u32,
-    spacing: u32,
-    tile_height: u32,
-    tile_width: u32,
+    pub tiles: Vec<Tile>,
+    #[serde(rename = "image")]
+    pub path: String,
+    #[serde(rename = "tilecount")]
+    pub tile_count: u32,
+    pub spacing: u32,
+    #[serde(rename = "tileheight")]
+    pub tile_height: u32,
+    #[serde(rename = "tilewidth")]
+    pub tile_width: u32,
 }
 

@@ -11,8 +11,9 @@ use amethyst::{
     },
     ui::{RenderUi, UiBundle},
     utils::{application_root_dir, fps_counter::FpsCounterBundle},
-assets::PrefabLoaderSystemDesc};
+assets::PrefabLoaderSystemDesc, assets::Processor};
 use components::{AnimationId, AnimationPrefabData};
+use resources::TileMap;
 
 mod components;
 mod entities;
@@ -56,6 +57,7 @@ fn main() -> amethyst::Result<()> {
         .with_bundle(rendering_bundle)?
         .with_bundle(systems::PlayerBundle)?
         .with_system_desc(prefab_loader_system_desc, "prefab_loader", &[])
+        .with(Processor::<TileMap>::new(), "map_processor", &[])
         .with(systems::GravitySystem::default(), "gravity_system", &[])
         .with(systems::TransformSystem, "transformation_system", &[])
         .with(
