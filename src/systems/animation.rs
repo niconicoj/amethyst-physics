@@ -81,7 +81,6 @@ impl<'s> System<'s> for PlayerAnimationSystem {
                 PlayerState::Running => AnimationId::Running,
                 PlayerState::Jumping => AnimationId::Jumping,
                 PlayerState::Falling => AnimationId::Falling,
-                _ => AnimationId::Idle,
             };
 
             // If the new AnimationId is different to the current one, abort the

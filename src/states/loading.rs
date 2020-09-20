@@ -5,7 +5,7 @@ use amethyst::{
 };
 
 use super::GameState;
-use crate::{entities::load_camera, resources::{Context, load_sprite_sheet}, resources::load_prefabs};
+use crate::{entities::load_camera, resources::{Context, load_sprite_sheets}, resources::load_prefabs};
 
 #[derive(Default)]
 pub struct LoadingState {
@@ -21,7 +21,7 @@ impl SimpleState for LoadingState {
 
         world.insert(context);
 
-        self.progress_counter = Some(load_sprite_sheet(world));
+        self.progress_counter = Some(load_sprite_sheets(world));
         let mut progress = ProgressCounter::default();
         world.exec(|mut creator: UiCreator<'_>| creator.create("ui/fps.ron", &mut progress));
         load_prefabs(world);

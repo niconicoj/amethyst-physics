@@ -1,40 +1,59 @@
+use std::collections::HashMap;
+
 use amethyst::{
     assets::{AssetStorage, Handle, Loader, ProgressCounter},
     ecs::prelude::World,
     prelude::WorldExt,
+    renderer::sprite::SpriteSheetHandle,
     renderer::{
         formats::texture::ImageFormat,
         sprite::{SpriteSheet, SpriteSheetFormat},
         Texture,
     },
 };
+use std::slice::Iter;
 
-const TEXTURE_PATH: &str = "spritesheet.png";
-const RON_PATH: &str = "spritesheet.ron";
+#[derive(Copy, Clone, Eq, Hash, PartialEq)]
+pub enum AssetType {
+    TileSet,
+}
+
+impl AssetType {
+    pub fn into_iter() -> Iter<'static, AssetType> {
+        static PREFAB_TYPE: [AssetType; 1] = [AssetType::TileSet];
+        PREFAB_TYPE.iter()
+    }
+}
 
 #[derive(Default)]
-pub struct SpriteSheetHandle {
-    spritesheet: Option<Handle<SpriteSheet>>,
+pub struct SpriteSheetList {
+    sprite_sheets: HashMap<AssetType, SpriteSheetHandle>,
 }
 
-impl SpriteSheetHandle {
-    pub fn insert(&mut self, handle: Handle<SpriteSheet>) {
-        self.spritesheet = Some(handle);
+impl SpriteSheetList {
+    pub fn insert(&mut self, asset_type: AssetType, sprite_sheet_handle: SpriteSheetHandle) {
+        self.sprite_sheets.insert(asset_type, sprite_sheet_handle);
     }
 
-    pub fn get(&self) -> Option<&Handle<SpriteSheet>> {
-        self.spritesheet.as_ref()
+    pub fn get(&self, asset_type: AssetType) -> Option<&SpriteSheetHandle> {
+        self.sprite_sheets.get(&asset_type)
     }
 }
 
-pub fn load_sprite_sheet(world: &mut World) -> ProgressCounter {
-    let mut sprite_sheet_entity = SpriteSheetHandle::default();
+pub fn load_sprite_sheets(world: &mut World) -> ProgressCounter {
+    let mut sprite_sheet_list = SpriteSheetList::default();
     let mut progress_counter = ProgressCounter::new();
 
-    let sprite_sheet_handle =
-        get_sprite_sheet_handle(world, TEXTURE_PATH, RON_PATH, &mut progress_counter);
-    sprite_sheet_entity.insert(sprite_sheet_handle);
-    world.insert(sprite_sheet_entity);
+    for &asset_type in AssetType::into_iter() {
+        let (texture_path, ron_path) = match asset_type {
+            AssetType::TileSet => ("textures/default_tileset.png", "textures/default_tileset.ron")
+        };
+
+        let sprite_sheet_handle =
+            get_sprite_sheet_handle(world, texture_path, ron_path, &mut progress_counter);
+        sprite_sheet_list.insert(asset_type, sprite_sheet_handle);
+    }
+    world.insert(sprite_sheet_list);
     progress_counter
 }
 

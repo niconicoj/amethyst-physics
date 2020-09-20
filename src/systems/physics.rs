@@ -1,20 +1,14 @@
-use amethyst::{core::math::Vector2, core::Time, ecs::Entities, ecs::Read, ecs::WriteStorage};
+use amethyst::{core::math::Vector2, core::Time, ecs::Entities, ecs::Read, ecs::WriteStorage, ecs::ReadStorage};
 use amethyst::{
     derive::SystemDesc,
     ecs::{Join, System, SystemData},
 };
 
-use crate::components::{BoundingBox, BoundingBoxState};
+use crate::components::{BoundingBox, BoundingBoxState, Weight};
 #[derive(SystemDesc)]
 #[system_desc(name(GravitySystemDesc))]
 pub struct GravitySystem {
     gravity: Vector2<f32>,
-}
-
-impl GravitySystem {
-    fn new(gravity: Vector2<f32>) -> Self {
-        Self { gravity }
-    }
 }
 
 impl Default for GravitySystem {
@@ -26,12 +20,22 @@ impl Default for GravitySystem {
 }
 
 impl<'s> System<'s> for GravitySystem {
-    type SystemData = (Entities<'s>, WriteStorage<'s, BoundingBox>, Read<'s, Time>);
+    type SystemData = (
+        Entities<'s>, 
+        WriteStorage<'s, BoundingBox>,
+        Read<'s, Time>,
+        ReadStorage<'s, Weight>,
+    );
 
     fn run(&mut self, data: Self::SystemData) {
-        let (entities, mut bounding_boxes, time) = data;
+        let (
+            entities, 
+            mut bounding_boxes, 
+            time, 
+            weights 
+        ) = data;
 
-        for (_, bounding_box) in (&entities, &mut bounding_boxes).join() {
+        for (_, bounding_box, _) in (&entities, &mut bounding_boxes, &weights).join() {
             match bounding_box.state {
                 BoundingBoxState::Flying => {
                     bounding_box.accelerate(self.gravity * time.delta_seconds());

@@ -1,12 +1,15 @@
-use crate::{components::{
-    BoundingBox, BoundingBoxState, Orientation, OrientationType, Player, PlayerState,
-}, events::PlayerInputEvent};
+use crate::{
+    components::{
+        BoundingBox, BoundingBoxState, Orientation, OrientationType, Player, PlayerState,
+    },
+    events::PlayerInputEvent,
+};
 use amethyst::{
-    core::math::Vector2,
-    core::Time,
+    ecs::Write,
     ecs::{Join, Read, System, WriteStorage},
     input::{InputHandler, StringBindings},
-ecs::Write, shrev::EventChannel};
+    shrev::EventChannel,
+};
 
 pub struct PlayerInputsystem;
 
@@ -20,13 +23,8 @@ impl<'s> System<'s> for PlayerInputsystem {
     );
 
     fn run(&mut self, data: Self::SystemData) {
-        let (
-            mut players, 
-            mut bounding_boxes, 
-            mut orientations, 
-            input, 
-            mut player_input_channel
-        ) = data;
+        let (mut players, mut bounding_boxes, mut orientations, input, mut player_input_channel) =
+            data;
 
         for (player, bounding_box, orientation) in
             (&mut players, &mut bounding_boxes, &mut orientations).join()
@@ -56,10 +54,10 @@ impl<'s> System<'s> for PlayerInputsystem {
                     if run_input != 0.0 {
                         if run_input > 0.0 {
                             orientation.value = OrientationType::Right;
-                        player_input_channel.single_write(PlayerInputEvent::InAirRight);
+                            player_input_channel.single_write(PlayerInputEvent::InAirRight);
                         } else {
                             orientation.value = OrientationType::Left;
-                        player_input_channel.single_write(PlayerInputEvent::InAirLeft);
+                            player_input_channel.single_write(PlayerInputEvent::InAirLeft);
                         }
                     }
                     if jump_action && bounding_box.velocity.y > 0.0 {

@@ -1,15 +1,13 @@
-use amethyst::{core::Transform, ecs::{System, WriteStorage, ReadStorage, Join}};
+use amethyst::{
+    ecs::{ReadStorage, System},
+};
 
 use crate::components::BoundingBox;
 
 pub struct BoundingBoxSystem;
 
 impl<'s> System<'s> for BoundingBoxSystem {
-    type SystemData = (
-        ReadStorage<'s, BoundingBox>,
-    );
+    type SystemData = (ReadStorage<'s, BoundingBox>,);
 
-    fn run(&mut self, data: Self::SystemData) {
-
-    }
+    fn run(&mut self, _data: Self::SystemData) {}
 }

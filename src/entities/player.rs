@@ -10,7 +10,7 @@ use amethyst::{
 use crate::{
     components::Animation, components::AnimationId, components::AnimationPrefabData,
     components::BoundingBox, components::Orientation, components::Player, resources::Context,
-};
+components::Weight};
 
 pub fn add_player(
     world: &mut World,
@@ -41,6 +41,7 @@ pub fn add_player(
         .with(Player::default())
         .with(prefab)
         .with(Orientation::default())
+        .with(Weight)
         .with(Animation::new(
             AnimationId::Idle,
             vec![
