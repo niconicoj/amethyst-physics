@@ -3,6 +3,10 @@
  <editorsettings>
   <export target="default-tileset.json" format="json"/>
  </editorsettings>
+ <properties>
+  <property name="ron_path" value="textures/default_tileset.ron"/>
+  <property name="texture_path" value="textures/default_tileset.png"/>
+ </properties>
  <image source="default_tileset.png" trans="ff00ff" width="32" height="16"/>
  <tile id="0">
   <properties>

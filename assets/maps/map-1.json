@@ -4,7 +4,7 @@
      "export":
         {
          "format":"json",
-         "target":"sans titre.json"
+         "target":"map-1.json"
         }
     },
  "height":100,
@@ -37,6 +37,12 @@
          "imagewidth":32,
          "margin":0,
          "name":"default-tileset",
+         "properties":[
+                {
+                 "name":"tilesetPath",
+                 "type":"string",
+                 "value":"textures\/default_tileset.png"
+                }],
          "spacing":0,
          "tilecount":2,
          "tileheight":16,

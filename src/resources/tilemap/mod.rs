@@ -1,7 +1,10 @@
 mod tileset;
 
+use std::slice::Iter;
+
 use amethyst::{ecs::VecStorage, assets::Asset, assets::Handle, ecs::World};
 use serde::{Deserialize, Serialize};
+use tileset::{Property, PropType};
 
 pub use self::tileset::TileSet;
 
@@ -33,9 +36,15 @@ impl Asset for TileMap {
 
 impl TileMap {
     pub fn register_tileset_spritesheet(&self, world: &mut World) {
-        for tileset in &self.tilesets {
-            println!("tileset path : {:?}", tileset.path);
-        }
+        
+    }
+    /// returns an option of the tileset property with the provided name.
+    fn get_tileset_prop(&self, prop_name: &str) -> Option<&Property> {
+        let props_arr: Vec<Vec<Property>> = self.tilesets.iter()
+            .map(|t| t.properties)
+            .collect();
+
+        props_arr.iter()
     }
 }
 

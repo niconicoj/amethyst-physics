@@ -5,6 +5,8 @@ use serde::{Deserialize, Serialize};
 pub enum PropType {
     #[serde(rename = "bool")]
     Bool(bool),
+    #[serde(rename = "string")]
+    Str(String),
 }
 
 #[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
@@ -32,5 +34,6 @@ pub struct TileSet {
     pub tile_height: u32,
     #[serde(rename = "tilewidth")]
     pub tile_width: u32,
+    pub properties: Vec<Property>,
 }
 

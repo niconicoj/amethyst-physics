@@ -4,6 +4,17 @@
  "imagewidth":32,
  "margin":0,
  "name":"default-tileset",
+ "properties":[
+        {
+         "name":"ron_path",
+         "type":"string",
+         "value":"textures\/default_tileset.ron"
+        }, 
+        {
+         "name":"texture_path",
+         "type":"string",
+         "value":"textures\/default_tileset.png"
+        }],
  "spacing":0,
  "tilecount":2,
  "tiledversion":"1.4.2",
