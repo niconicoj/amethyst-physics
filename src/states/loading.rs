@@ -41,17 +41,6 @@ impl SimpleState for LoadingState {
             ))
         };
 
-        let tilemap = {
-            let tilemap_storage = &world.read_resource::<AssetStorage<TileMap>>();
-            let tilemap_handle = &self.tilemap_handle.take().unwrap();
-            tilemap_storage.get(tilemap_handle).unwrap().clone()
-        };
-
-        tilemap.register_tileset_spritesheet(
-            world,
-            self.progress_counter.as_mut().expect("map spritesheet"),
-        );
-
         load_camera(world);
     }
 
