@@ -11,6 +11,7 @@ ron = "0.6.1"
 nalgebra = "0.22.0"
 strum = "0.19.2"
 strum_macros = "0.19.2"
+serde_tuple = "0.5.0"
 
 [dependencies.amethyst]
 git = "https://github.com/niconicoj/amethyst"

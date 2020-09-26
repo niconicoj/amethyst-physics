@@ -1,12 +1,11 @@
 mod tileset;
 
-use std::slice::Iter;
-
-use amethyst::{ecs::VecStorage, assets::Asset, assets::Handle, ecs::World};
+use amethyst::{assets::Asset, assets::Handle, assets::ProgressCounter, ecs::VecStorage, ecs::World, ecs::WorldExt};
 use serde::{Deserialize, Serialize};
-use tileset::{Property, PropType};
 
 pub use self::tileset::TileSet;
+
+use super::{SpriteSheetList, spritesheet::get_sprite_sheet_handle, AssetType};
 
 #[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
 pub struct Layer {
@@ -16,7 +15,7 @@ pub struct Layer {
     pub width: u32,
 }
 
-#[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct TileMap {
     height: u32,
     width: u32,
@@ -35,16 +34,22 @@ impl Asset for TileMap {
 }
 
 impl TileMap {
-    pub fn register_tileset_spritesheet(&self, world: &mut World) {
-        
-    }
-    /// returns an option of the tileset property with the provided name.
-    fn get_tileset_prop(&self, prop_name: &str) -> Option<&Property> {
-        let props_arr: Vec<Vec<Property>> = self.tilesets.iter()
-            .map(|t| t.properties)
-            .collect();
-
-        props_arr.iter()
+    pub fn register_tileset_spritesheet(
+        &self,
+        world: &mut World,
+        progress_counter: &mut ProgressCounter,
+    ) {
+        for tileset in &self.tilesets {
+            println!("ron path : {}", tileset.properties.ron_path);
+            println!("ron path : {}", tileset.properties.texture_path);
+            let sprite_sheet_handle = get_sprite_sheet_handle(
+                world,
+                tileset.properties.texture_path.as_str(),
+                tileset.properties.ron_path.as_str(),
+                progress_counter,
+            );
+            let mut sprite_sheet_list = world.write_resource::<SpriteSheetList>();
+            sprite_sheet_list.insert(AssetType::TileSet, sprite_sheet_handle);
+        }
     }
 }
-

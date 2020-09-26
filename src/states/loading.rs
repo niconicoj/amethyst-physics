@@ -41,21 +41,23 @@ impl SimpleState for LoadingState {
             ))
         };
 
+        let tilemap = {
+            let tilemap_storage = &world.read_resource::<AssetStorage<TileMap>>();
+            let tilemap_handle = &self.tilemap_handle.take().unwrap();
+            tilemap_storage.get(tilemap_handle).unwrap().clone()
+        };
+
+        tilemap.register_tileset_spritesheet(
+            world,
+            self.progress_counter.as_mut().expect("map spritesheet"),
+        );
+
         load_camera(world);
     }
 
     fn update(&mut self, data: &mut StateData<'_, GameData<'_, '_>>) -> SimpleTrans {
         if let Some(ref progress_counter) = self.progress_counter {
             if progress_counter.is_complete() {
-
-                let tilemap = {
-                    let tilemap_storage = &data.world.read_resource::<AssetStorage<TileMap>>();
-                    let tilemap_handle = &self.tilemap_handle.take().unwrap();
-                    tilemap_storage.get(tilemap_handle).unwrap().clone()
-                };
-
-                tilemap.register_tileset_spritesheet(data.world);
-
                 self.progress_counter = None;
                 return Trans::Switch(Box::new(GameState));
             }

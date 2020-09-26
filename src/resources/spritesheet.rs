@@ -57,7 +57,7 @@ pub fn load_sprite_sheets(world: &mut World) -> ProgressCounter {
     progress_counter
 }
 
-fn get_sprite_sheet_handle(
+pub fn get_sprite_sheet_handle(
     world: &mut World,
     texture_path: &str,
     ron_path: &str,

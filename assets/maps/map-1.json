@@ -16,6 +16,17 @@
          "id":1,
          "name":"collision",
          "opacity":1,
+         "properties":[
+                {
+                 "name":"asset_path",
+                 "type":"string",
+                 "value":"textures\/default-tileset.png"
+                }, 
+                {
+                 "name":"ron_path",
+                 "type":"string",
+                 "value":"textures\/default-tileset.ron"
+                }],
          "type":"tilelayer",
          "visible":true,
          "width":100,
@@ -39,7 +50,12 @@
          "name":"default-tileset",
          "properties":[
                 {
-                 "name":"tilesetPath",
+                 "name":"ron_path",
+                 "type":"string",
+                 "value":"textures\/default_tileset.ron"
+                }, 
+                {
+                 "name":"texture_path",
                  "type":"string",
                  "value":"textures\/default_tileset.png"
                 }],
